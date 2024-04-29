@@ -161,16 +161,16 @@ public class ArithmeticApp {
             i++;
         }
         i = 1;
-        int final_result = Integer.parseInt(new_exp[0]);
+        int final_result = Integer.parseInt(new_exp[0],base);
         while ( i < new_exp.length && new_exp[i]!=null ){
             if (new_exp[i].equals("-"))
             {
-                int second_int = Integer.parseInt(new_exp[i+1]);
+                int second_int = Integer.parseInt(new_exp[i+1],base);
                 final_result = final_result - second_int;
             }
             else if(new_exp[i].equals("+"))
             {
-                int second_int = Integer.parseInt(new_exp[i+1]);
+                int second_int = Integer.parseInt(new_exp[i+1],base);
                 final_result = final_result + second_int;
             }
             i+=2;
