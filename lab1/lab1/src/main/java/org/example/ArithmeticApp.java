@@ -149,8 +149,9 @@ public class ArithmeticApp {
                 }
                 i+=2;
             }
+
             if (!first){
-                String result = current_result +"";
+                String result = Integer.toString(current_result, base);
                 new_exp[j] = result;
                 j++;
             }
@@ -175,6 +176,7 @@ public class ArithmeticApp {
             }
             i+=2;
         }
+
         return final_result;
     }
     public static int answer_expression(String[] exp , int base){
@@ -274,7 +276,8 @@ public class ArithmeticApp {
             valid = is_vaild(parts,base);
         }
         int answer = answer_expression(parts,base);
-        System.out.println("answer: "+answer);
+        String final_answer = Integer.toString(answer,base);
+        System.out.println("answer: "+final_answer);
 
 
 
