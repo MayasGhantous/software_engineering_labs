@@ -277,7 +277,7 @@ public class ArithmeticApp {
         }
         int answer = answer_expression(parts,base);
         String final_answer = Integer.toString(answer,base);
-        System.out.println("answer: "+final_answer);
+        System.out.println("The value of the expression "+exp + " is: " + final_answer);
 
 
 
