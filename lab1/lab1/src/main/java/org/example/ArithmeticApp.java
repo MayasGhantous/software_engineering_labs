@@ -12,11 +12,20 @@ public class ArithmeticApp {
             return false;
         }
     }
+    public static boolean isDouble(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public static String[] get_array_from_expression(String exp,int base)
     {
         exp = exp.replaceAll("\\s", "");
         int i = 0;
-        String temp = "";
+        /**String temp = "";
         for (i =0; i<exp.length();i++)
         {
             if(exp.charAt(i) == '+' || exp.charAt(i) == '-')
@@ -54,35 +63,22 @@ public class ArithmeticApp {
                 temp = temp.concat(exp.charAt(i)+"");
 
         }
-        exp = temp;
-        String[] parts = exp.split("(?<=[+\\-*/()])|(?=[+\\-*/()])");
+        exp = temp;**/
+        String[] parts = exp.split("(?<=[+\\-*/])|(?=[+\\-*/])");
         return parts;
     }
     public static boolean is_vaild(String[] exp , int base)
     {
-        int open_parentheses = 0;
-        int close_parentheses = 0;
-        for (int i = 0; i < exp.length; i++) {
-            if (exp[i].equals("(")) {open_parentheses++;}
-            else if (exp[i].equals(")")) {close_parentheses++;}
-            if (close_parentheses > open_parentheses)
-                return false;
-        }
-        if (open_parentheses != close_parentheses) {return false;}
+        
         boolean the_previous_is_a_number = false;
         for (int i= 0; i < exp.length; i++)
         {
             //this is not a valid expression if the part is not a number or arthmitical sign
-            if(!isInteger(exp[i], base) && !exp[i].equals("+") && !exp[i].equals("-") && !exp[i].equals("*") && !exp[i].equals("/")&& !exp[i].equals(")")&& !exp[i].equals("("))
+            if(!isInteger(exp[i], base) && !exp[i].equals("+") && !exp[i].equals("-") && !exp[i].equals("*") && !exp[i].equals("/"))
             {
                 return false;
             }
-            if (exp[i].equals(")")){
-                continue;
-            }
-            if (exp[i].equals("(")){
-                continue;
-            }
+
             if (i==0 || i==exp.length-1)
             {
 
@@ -114,44 +110,58 @@ public class ArithmeticApp {
     }
     public static int answer_expression_with_out_parentheses(String[] exp , int base)
     {
+        for(int i = 0 ;i < exp.length;i++)
+        {
+            //convert each number to base 10
+            if (isInteger(exp[i], base)){
+                double current_int = Integer.parseInt(exp[i],base);
+                exp[i] = current_int +"";
+            }
+        }
         String[] new_exp = new String[exp.length];
         int j = 0;
         int i = 0;
         while (i < exp.length){
+            // if we have / or *  then we don't include the first number of the / and the * in the new_exp but we include it in the
+            //calculation
             if (i+1 < exp.length&&(exp[i+1].equals("/") || exp[i+1].equals("*")))
             {
                 i++;
             }
-            int current_result = 0;
+            double current_result = 0;
             boolean first = true;
+            // solve the current "/" and "*" expression
             while (i < exp.length&&(exp[i].equals("/") || exp[i].equals("*")))
             {
+                // save the first number
                 if (first)
                 {
-                    current_result = Integer.parseInt(exp[i-1],base);
+                    current_result = Double.parseDouble(exp[i-1]);
                     first = false;
                 }
                 if (exp[i].equals("/"))
                 {
-                    if (Integer.parseInt(exp[i+1],base) ==0){
-                        throw new RuntimeException("Error: trying to divide by 0 (evaluated: \"0\")");
+                    if (Double.parseDouble(exp[i+1]) ==0){
+                        System.out.println("Error: trying to divide by 0 (evaluated: \"0\")");
+                        return -1;
                     }
                     else{
-                        int second_int = Integer.parseInt(exp[i+1],base);
+                        double second_int = Double.parseDouble(exp[i+1]);
                         current_result = current_result  / second_int;
 
                     }
                 }
                 else if(exp[i].equals("*"))
                 {
-                    int second_int = Integer.parseInt(exp[i+1],base);
+                    double second_int = Double.parseDouble(exp[i+1]);
                     current_result = current_result  * second_int;
                 }
                 i+=2;
             }
 
             if (!first){
-                String result = Integer.toString(current_result, base);
+                // if you have caluclated expression save it
+                String result = Double.toString(current_result);
                 new_exp[j] = result;
                 j++;
             }
@@ -162,26 +172,27 @@ public class ArithmeticApp {
             i++;
         }
         i = 1;
-        int final_result = Integer.parseInt(new_exp[0],base);
+        double final_result = Double.parseDouble(new_exp[0]);
         while ( i < new_exp.length && new_exp[i]!=null ){
             if (new_exp[i].equals("-"))
             {
-                int second_int = Integer.parseInt(new_exp[i+1],base);
+                double second_int = Double.parseDouble(new_exp[i+1]);
                 final_result = final_result - second_int;
             }
             else if(new_exp[i].equals("+"))
             {
-                int second_int = Integer.parseInt(new_exp[i+1],base);
+                double second_int = Double.parseDouble(new_exp[i+1]);
                 final_result = final_result + second_int;
             }
             i+=2;
         }
 
-        return final_result;
+        return (int)final_result;
     }
     public static int answer_expression(String[] exp , int base){
 
         boolean has_parentheses = false;
+
         for (int i =0 ; i < exp.length;i++)
         {
             if (exp[i].equals("(")){
@@ -268,19 +279,23 @@ public class ArithmeticApp {
         String[] parts = get_array_from_expression(exp,base);
         boolean valid = is_vaild(parts,base);
 
-        while (!valid)
+        if (!valid)
         {
-            System.out.println("Error: invalid expression:");
-            exp =sc.next();
+            System.out.println("Error: invalid expression: \"\"");
+            /**exp =sc.next();
             parts = get_array_from_expression(exp,base);
-            valid = is_vaild(parts,base);
+            valid = is_vaild(parts,base);**/
         }
-        int answer = answer_expression(parts,base);
-        String final_answer = Integer.toString(answer,base);
-        System.out.println("The value of the expression "+exp + " is: " + final_answer);
+        else {
 
 
-
+            int answer = answer_expression(parts, base);
+            if (answer != -1) {
+                //System.out.println("The value of the expression in base 10" + exp + " is: " + answer);
+                String final_answer = Integer.toString(answer, base).toUpperCase();
+                System.out.println("The value of the expression " + exp + " is: " + final_answer);
+            }
+        }
 
     }
 }
