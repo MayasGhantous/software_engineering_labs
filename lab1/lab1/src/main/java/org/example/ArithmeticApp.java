@@ -23,8 +23,8 @@ public class ArithmeticApp {
 
     public static String[] get_array_from_expression(String exp,int base)
     {
-        exp = exp.replaceAll("\\s", "");
-        int i = 0;
+
+        exp = exp.replaceAll("\\s+", " ");
         /**String temp = "";
         for (i =0; i<exp.length();i++)
         {
@@ -64,8 +64,28 @@ public class ArithmeticApp {
 
         }
         exp = temp;**/
-        String[] parts = exp.split("(?<=[+\\-*/])|(?=[+\\-*/])");
-        return parts;
+
+        String[] parts = exp.split("\\s|(?<=[+\\-*/])|(?=[+\\-*/])");
+        int real_length = parts.length;
+        for (int i =0 ; i < parts.length ; i++)
+        {
+            parts[i] =  parts[i].trim();
+            if (parts[i].isEmpty())
+            {
+                real_length--;
+            }
+        }
+        String[] result = new String[real_length];
+        int j =0 ;
+        for (int i =0 ; i < parts.length ; i++)
+        {
+            if (!parts[i].isEmpty())
+            {
+                result[j] = parts[i];
+                j++;
+            }
+        }
+        return result;
     }
     public static boolean is_vaild(String[] exp , int base)
     {
@@ -293,7 +313,7 @@ public class ArithmeticApp {
             if (answer != -1) {
                 //System.out.println("The value of the expression in base 10" + exp + " is: " + answer);
                 String final_answer = Integer.toString(answer, base).toUpperCase();
-                System.out.println("The value of the expression " + exp + " is: " + final_answer);
+                System.out.println("The value of expression " + exp + " is: " + final_answer);
             }
         }
 
