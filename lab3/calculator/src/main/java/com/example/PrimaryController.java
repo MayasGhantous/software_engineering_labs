@@ -7,7 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 public class PrimaryController {
-
+    private int current_base = 0 ;
     @FXML
     private Button Btn_0;
 
@@ -184,6 +184,8 @@ public class PrimaryController {
 
     @FXML
     void Btn_click_equals(ActionEvent event) {
+        String answer = org.example.ArithmeticApp.Answer(resultTF.getText(),current_base);
+        resultTF.setText(answer);
 
     }
 
@@ -212,9 +214,28 @@ public class PrimaryController {
 
     @FXML
     void select_base(ActionEvent event) {
+        String base = baseCB.getSelectionModel().getSelectedItem();
+
         if (!resultTF.getText().isEmpty())
         {
+            String answer = org.example.ArithmeticApp.Answer(resultTF.getText(),current_base);
+            if (org.example.ArithmeticApp.isInteger(answer,current_base));
+            {
+                int answer_in_10 = Integer.parseInt(answer,current_base);
+                if (base.equals("BIN"))
+                    answer = Integer.toString(answer_in_10, 2).toUpperCase();
+                else if (base.equals("OCT")) {
+                    answer = Integer.toString(answer_in_10, 8).toUpperCase();
 
+                }
+                else if (base.equals("DEC")) {
+                    answer = Integer.toString(answer_in_10, 10).toUpperCase();
+                }
+                else if (base.equals("HEX")) {
+                    answer = Integer.toString(answer_in_10, 16).toUpperCase();
+                }
+            }
+            resultTF.setText(answer);
         }
         Btn_minus.setDisable(false);
         Btn_plus.setDisable(false);
@@ -222,9 +243,9 @@ public class PrimaryController {
         Btn_Div.setDisable(false);
         Btn_eqauls.setDisable(false);
         clearBtn.setDisable(false);
-        String base = baseCB.getSelectionModel().getSelectedItem();
         if(base.equals("BIN") )
         {
+            current_base = 2;
             Btn_0.setDisable(false);
             Btn_1.setDisable(false);
             Btn_2.setDisable(true);
@@ -242,6 +263,8 @@ public class PrimaryController {
             Btn_E.setDisable(true);
             Btn_F.setDisable(true);
         } else if (base.equals("OCT")) {
+            current_base = 8;
+
             Btn_0.setDisable(false);
             Btn_1.setDisable(false);
             Btn_2.setDisable(false);
@@ -260,6 +283,7 @@ public class PrimaryController {
             Btn_F.setDisable(true);
         }
         else if(base.equals("DEC")) {
+            current_base = 10;
             Btn_0.setDisable(false);
             Btn_1.setDisable(false);
             Btn_2.setDisable(false);
@@ -279,6 +303,8 @@ public class PrimaryController {
 
         }
         else if(base.equals("HEX")) {
+            current_base = 16;
+
             Btn_0.setDisable(false);
             Btn_1.setDisable(false);
             Btn_2.setDisable(false);
