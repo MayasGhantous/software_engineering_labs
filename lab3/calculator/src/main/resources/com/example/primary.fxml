@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="386.0" prefWidth="357.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.PrimaryController">
+   <children>
+      <TextField fx:id="resultTF" disable="true" layoutX="11.0" layoutY="14.0" prefHeight="67.0" prefWidth="335.0" style="-fx-border-color: lightblue;" />
+      <ComboBox fx:id="baseCB" layoutX="115.0" layoutY="95.0" onAction="#select_base" prefHeight="26.0" prefWidth="126.0" />
+      <Button fx:id="clearBtn" disable="true" layoutX="274.0" layoutY="93.0" mnemonicParsing="false" onAction="#clear_result" prefHeight="30.0" prefWidth="50.0" text="Clear" />
+      <Button fx:id="Btn_A" disable="true" layoutX="31.0" layoutY="90.0" mnemonicParsing="false" onAction="#Btn_click_A" prefHeight="35.0" prefWidth="55.0" text="A" />
+      <Button fx:id="Btn_9" disable="true" layoutX="268.0" layoutY="233.0" mnemonicParsing="false" onAction="#Btn_click_9" prefHeight="35.0" prefWidth="55.0" text="9" />
+      <Button fx:id="Btn_6" disable="true" layoutX="268.0" layoutY="184.0" mnemonicParsing="false" onAction="#Btn_click_6" prefHeight="35.0" prefWidth="55.0" text="6" />
+      <Button fx:id="Btn_3" disable="true" layoutX="268.0" layoutY="135.0" mnemonicParsing="false" onAction="#Btn_click_3" prefHeight="35.0" prefWidth="55.0" text="3" />
+      <Button fx:id="Btn_0" disable="true" layoutX="268.0" layoutY="282.0" mnemonicParsing="false" onAction="#Btn_click_0" prefHeight="35.0" prefWidth="55.0" text="0" />
+      <Button fx:id="Btn_eqauls" disable="true" layoutX="268.0" layoutY="336.0" mnemonicParsing="false" onAction="#Btn_click_equals" prefHeight="35.0" prefWidth="55.0" text="=" />
+      <Button fx:id="Btn_Div" disable="true" layoutX="185.0" layoutY="336.0" mnemonicParsing="false" onAction="#Btn_click_Div" prefHeight="35.0" prefWidth="55.0" text="/" />
+      <Button fx:id="Btn_minus" disable="true" layoutX="185.0" layoutY="282.0" mnemonicParsing="false" onAction="#Btn_click_minus" prefHeight="35.0" prefWidth="55.0" text="-" />
+      <Button fx:id="Btn_8" disable="true" layoutX="185.0" layoutY="233.0" mnemonicParsing="false" onAction="#Btn_click_8" prefHeight="35.0" prefWidth="55.0" text="8" />
+      <Button fx:id="Btn_5" disable="true" layoutX="185.0" layoutY="184.0" mnemonicParsing="false" onAction="#Btn_click_5" prefHeight="35.0" prefWidth="55.0" text="5" />
+      <Button fx:id="Btn_2" disable="true" layoutX="185.0" layoutY="135.0" mnemonicParsing="false" onAction="#Btn_click_2" prefHeight="35.0" prefWidth="55.0" text="2" />
+      <Button fx:id="Btn_F" disable="true" layoutX="31.0" layoutY="336.0" mnemonicParsing="false" onAction="#Btn_click_F" prefHeight="35.0" prefWidth="55.0" text="F" />
+      <Button fx:id="Btn_E" disable="true" layoutX="31.0" layoutY="282.0" mnemonicParsing="false" onAction="#Btn_click_E" prefHeight="35.0" prefWidth="55.0" text="E" />
+      <Button fx:id="Btn_D" disable="true" layoutX="31.0" layoutY="233.0" mnemonicParsing="false" onAction="#Btn_click_D" prefHeight="35.0" prefWidth="55.0" text="D" />
+      <Button fx:id="Btn_C" disable="true" layoutX="31.0" layoutY="184.0" mnemonicParsing="false" onAction="#Btn_click_C" prefHeight="35.0" prefWidth="55.0" text="C" />
+      <Button fx:id="Btn_B" disable="true" layoutX="31.0" layoutY="135.0" mnemonicParsing="false" onAction="#Btn_click_B" prefHeight="35.0" prefWidth="55.0" text="B" />
+      <Button fx:id="Btn_Mul" disable="true" layoutX="107.0" layoutY="336.0" mnemonicParsing="false" onAction="#Btn_click_mul" prefHeight="35.0" prefWidth="55.0" text="*" />
+      <Button fx:id="Btn_plus" disable="true" layoutX="107.0" layoutY="282.0" mnemonicParsing="false" onAction="#Btn_click_plus" prefHeight="35.0" prefWidth="55.0" text="+" />
+      <Button fx:id="Btn_7" disable="true" layoutX="107.0" layoutY="233.0" mnemonicParsing="false" onAction="#Btn_click_7" prefHeight="35.0" prefWidth="55.0" text="7" />
+      <Button fx:id="Btn_4" disable="true" layoutX="107.0" layoutY="184.0" mnemonicParsing="false" onAction="#Btn_click_4" prefHeight="35.0" prefWidth="55.0" text="4" />
+      <Button fx:id="Btn_1" disable="true" layoutX="107.0" layoutY="135.0" mnemonicParsing="false" onAction="#Btn_click_1" prefHeight="35.0" prefWidth="55.0" text="1" />
+   </children>
+</AnchorPane>
