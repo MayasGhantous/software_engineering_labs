@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 
 public class PrimaryController {
     private int current_base = 0 ;
+    private boolean error = false;
     @FXML
     private Button Btn_0;
 
@@ -82,126 +83,236 @@ public class PrimaryController {
 
     @FXML
     void Btn_click_0(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "0");
 
     }
 
     @FXML
     void Btn_click_1(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "1");
 
     }
 
     @FXML
     void Btn_click_2(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "2");
 
     }
 
     @FXML
     void Btn_click_3(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "3");
 
     }
 
     @FXML
     void Btn_click_4(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "4");
 
     }
 
     @FXML
     void Btn_click_5(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "5");
 
     }
 
     @FXML
     void Btn_click_6(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "6");
 
     }
 
     @FXML
     void Btn_click_7(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "7");
 
     }
 
     @FXML
     void Btn_click_8(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "8");
 
     }
 
     @FXML
     void Btn_click_9(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "9");
 
     }
 
     @FXML
     void Btn_click_A(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "A");
 
     }
 
     @FXML
     void Btn_click_B(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "B");
 
     }
 
     @FXML
     void Btn_click_C(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "C");
 
     }
 
     @FXML
     void Btn_click_D(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "D");
 
     }
 
     @FXML
     void Btn_click_Div(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + " / ");
 
     }
 
     @FXML
     void Btn_click_E(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "E");
 
     }
 
     @FXML
     void Btn_click_F(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText() + "F");
 
     }
 
     @FXML
     void Btn_click_equals(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
+        if (resultTF.getText().isEmpty())
+            return;
         String answer = org.example.ArithmeticApp.Answer(resultTF.getText(),current_base);
+        if (!org.example.ArithmeticApp.isInteger(answer, current_base)) {
+            error = true;
+        }
         resultTF.setText(answer);
 
     }
 
     @FXML
     void Btn_click_minus(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText()+ " - ");
 
     }
 
     @FXML
     void Btn_click_mul(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText()+ " * ");
     }
 
     @FXML
     void Btn_click_plus(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         resultTF.setText(resultTF.getText()+" + ");
 
     }
@@ -214,6 +325,11 @@ public class PrimaryController {
 
     @FXML
     void select_base(ActionEvent event) {
+        if (error)
+        {
+            resultTF.clear();
+            error = false;
+        }
         String base = baseCB.getSelectionModel().getSelectedItem();
 
         if (!resultTF.getText().isEmpty())
@@ -233,6 +349,10 @@ public class PrimaryController {
                 }
                 else if (base.equals("HEX")) {
                     answer = Integer.toString(answer_in_10, 16).toUpperCase();
+                }
+                else
+                {
+                    error = true;
                 }
             }
             resultTF.setText(answer);
