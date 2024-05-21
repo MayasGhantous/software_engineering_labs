@@ -21,6 +21,13 @@ public class PrimaryController {
         int c= Integer.parseInt(counterTF.getText());
         c++;
         counterTF.setText(String.valueOf(c));
+        if (c%2==1)
+        {
+            helloTF.setText("Hello World!");
+        }
+        else {
+            helloTF.setText("");
+        }
     }
 
 }
