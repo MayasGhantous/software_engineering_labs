@@ -1,0 +1,1 @@
+SELECT Houses.House, Houses.TeamNum, Teams.Team, Teams.City FROM Houses INNER JOIN Teams ON Houses.TeamNum = Teams.Num order by Houses.House asc;

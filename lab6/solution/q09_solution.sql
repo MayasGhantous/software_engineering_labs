@@ -1,0 +1,1 @@
+SELECT Teams.Team, Teams.City,Teams.Wins,Budget.Budget FROM Teams INNER JOIN Budget ON Budget.TeamNum = Teams.Num;

@@ -1,0 +1,1 @@
+SELECT Houses.House FROM Houses INNER JOIN Players ON Players.TeamNum= Houses.TeamNum WHERE Players.PlayerName='Adam Ariel';

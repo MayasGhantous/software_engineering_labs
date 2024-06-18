@@ -1,0 +1,1 @@
+SELECT Teams.City, COUNT(*) FROM Teams group by Teams.City HAVING COUNT(*)>1;

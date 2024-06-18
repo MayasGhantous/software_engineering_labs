@@ -1,0 +1,1 @@
+SELECT Teams.Team,COUNT(*) FROM Teams group by Teams.Team;

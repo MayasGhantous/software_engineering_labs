@@ -1,0 +1,1 @@
+SELECT Coach FROM Teams WHERE Established>=1960 AND Established<=1970;

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM Players WHERE PlayerName LIKE '%Naor%';

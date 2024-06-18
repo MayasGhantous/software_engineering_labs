@@ -1,0 +1,1 @@
+SELECT SUM(Wins) FROM TEAMS WHERE Team = 'Hapoel';

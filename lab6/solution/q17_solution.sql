@@ -1,0 +1,1 @@
+SELECT Coach FROM Teams WHERE Coach LIKE '%a%';
