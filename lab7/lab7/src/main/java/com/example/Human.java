@@ -1,6 +1,7 @@
 package com.example;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,17 +19,25 @@ public class Human {
     @OneToMany(mappedBy = "Human", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> Cars;
 
-    @ManyToMany(mappedBy = "Humans")
-    private List<garage> garages;
+    @ManyToMany
+    @JoinTable(
+            name = "human_garage",
+            joinColumns = @JoinColumn(name = "human_id"),
+            inverseJoinColumns = @JoinColumn(name = "garage_id")
+    )
+    private List<Carage> garages;
 
     public  Human(){}
 
     public Human(String first_name,String last_name,String Password,String Email)
     {
+        super();
         this.first_name = first_name;
         this.last_name = last_name;
         this.Password = Password;
         this.Email = Email;
+        this.Cars = new ArrayList<Car>();
+        this.garages = new ArrayList<Carage>();
     }
 
     public String getFirstName(){
@@ -50,7 +59,7 @@ public class Human {
     public List<Car> getCars() {return Cars;}
     public void setCars(List<Car> Cars) {this.Cars = Cars;}
 
-    public List<garage> getGarages() {return garages;}
-    public void setGarages(List<garage> garages) {this.garages = garages;}
+    public List<Carage> getGarages() {return garages;}
+    public void setGarages(List<Carage> garages) {this.garages = garages;}
 
 }

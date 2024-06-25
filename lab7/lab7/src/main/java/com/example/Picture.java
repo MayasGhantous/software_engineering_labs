@@ -16,9 +16,9 @@ public class Picture {
     private Car Car;
 
     public Picture(){}
-    public Picture(Car Car1) {
+    public Picture(String picture_name) {
         super();
-        this.Car = Car1;
+        this.picture_name = picture_name;
     }
     public int getPicture_id() {return this.id;}
 

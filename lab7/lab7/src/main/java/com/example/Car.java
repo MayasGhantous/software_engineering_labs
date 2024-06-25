@@ -1,6 +1,7 @@
 package com.example;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,16 +27,16 @@ public class Car {
     private Picture picture;
 
     @ManyToMany(mappedBy = "cars")
-    private List<Garage> garages;
+    private List<Carage> garages;
 
     public Car() { }
-    public Car(String licensePlate, double price, int year, Human Human, Picture picture) {
+    public Car(String licensePlate, double price, int year) {
         super();
         this.licensePlate = licensePlate;
         this.price = price;
         this.year = year;
-        this.Human = Human;
-        this.picture = picture;
+        this.garages = new ArrayList<Carage>();
+
     }
 
     public String getLicensePlate() {
@@ -71,6 +72,6 @@ public class Car {
     public Picture getPicture() {return this.picture;}
     public void setPicture(Picture picture) {this.picture = picture;}
 
-    public List<Garage> getGarages() {return garages;}
-    public void setGarages(List<Garage> garages) {this.garages=garages;}
+    public List<Carage> getGarages() {return garages;}
+    public void setGarages(List<Carage> garages) {this.garages=garages;}
 }
