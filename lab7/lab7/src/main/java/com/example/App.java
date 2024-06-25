@@ -24,13 +24,17 @@ public class App
         // Add ALL of your entities here. You can also try adding a whole package.
         configuration.addAnnotatedClass(Car.class);
         configuration.addAnnotatedClass(Human.class);
+        configuration.addAnnotatedClass(garage.class);
+        configuration.addAnnotatedClass(picture.class);
 
         ServiceRegistry serviceRegistry = new
                 StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())
                 .build();
 
-        return configuration.buildSessionFactory(serviceRegistry);
+        SessionFactory current=  configuration.buildSessionFactory(serviceRegistry);
+        System.out.println("SessionFactory created");
+        return current;
     }
 
     private static void generateCars() throws Exception {
@@ -38,7 +42,7 @@ public class App
 
         for (int i = 0; i < 10; i++) {
             Car car = new Car("MOO-" + random.nextInt(), 100000, 2000 +
-                    random.nextInt(19));
+                    random.nextInt(19),new Human(),new Picture());
             session.save(car);
             /*
              * The call to session.flush() updates the DB immediately

@@ -1,9 +1,10 @@
 package com.example;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "humans")
+@Table(name = "humans_table")
 public class Human {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +14,12 @@ public class Human {
     private String last_name;
     private String Password;
     private String Email;
+
+    @OneToMany(mappedBy = "Human", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Car> Cars;
+
+    @ManyToMany(mappedBy = "Humans")
+    private List<garage> garages;
 
     public  Human(){}
 
@@ -38,5 +45,12 @@ public class Human {
     public String getEmail() {return Email;}
     public void setEmail(String Email) {this.Email = Email;}
 
+    public int getId() {return id;}
+
+    public List<Car> getCars() {return Cars;}
+    public void setCars(List<Car> Cars) {this.Cars = Cars;}
+
+    public List<garage> getGarages() {return garages;}
+    public void setGarages(List<garage> garages) {this.garages = garages;}
 
 }

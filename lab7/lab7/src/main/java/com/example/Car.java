@@ -1,9 +1,10 @@
 package com.example;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "cars")
+@Table(name = "cars_table")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +17,25 @@ public class Car {
     @Column(name = "manufacturing_year")
     private int year;
 
-    private int Human_ID;
+    @ManyToOne
+    @JoinColumn(name = "human_id", referencedColumnName = "id")
+    private Human Human;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "picture_id", referencedColumnName = "id")
+    private Picture picture;
+
+    @ManyToMany(mappedBy = "cars")
+    private List<Garage> garages;
+
     public Car() { }
-    public Car(String licensePlate, double price, int year) {
+    public Car(String licensePlate, double price, int year, Human Human, Picture picture) {
         super();
         this.licensePlate = licensePlate;
         this.price = price;
         this.year = year;
+        this.Human = Human;
+        this.picture = picture;
     }
 
     public String getLicensePlate() {
@@ -52,6 +65,12 @@ public class Car {
         return id;
     }
 
-    public int getHuman_ID() {return Human_ID;}
-    public void setHuman_ID(int Human_ID) {this.Human_ID = Human_ID;}
+    public Human getHuman() {return Human;}
+    public void setHuman(Human Human) {this.Human = Human;}
+
+    public Picture getPicture() {return this.picture;}
+    public void setPicture(Picture picture) {this.picture = picture;}
+
+    public List<Garage> getGarages() {return garages;}
+    public void setGarages(List<Garage> garages) {this.garages=garages;}
 }
