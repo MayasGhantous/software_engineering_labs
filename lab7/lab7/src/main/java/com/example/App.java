@@ -19,10 +19,9 @@ public class App
 
     private static Session session;
 
-    private static SessionFactory getSessionFactory(String UserName ,String Password) throws
+    private static SessionFactory getSessionFactory(String Password) throws
             HibernateException {
         Configuration configuration = new Configuration();
-        configuration.setProperty("hibernate.connection.username",UserName);
         configuration.setProperty("hibernate.connection.password",Password);
 
         // Add ALL of your entities here. You can also try adding a whole package.
@@ -199,6 +198,8 @@ otherwise you may get cache errors.
                 System.out.print("  car_licensePlate: "+car.getLicensePlate());
                 System.out.print("\n");
             }
+            System.out.print('\n');
+
         }
     }
 
@@ -226,6 +227,7 @@ otherwise you may get cache errors.
                 }
 
                 System.out.print('\n');
+                System.out.print('\n');
 
             }
 
@@ -235,13 +237,11 @@ otherwise you may get cache errors.
     public static void main( String[] args ) {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter User Name:\n");
-            String User_name = scanner.nextLine();
             System.out.print("Enter Password\n");
             String Password = scanner.nextLine();
 
 
-            SessionFactory sessionFactory = getSessionFactory(User_name,Password);
+            SessionFactory sessionFactory = getSessionFactory(Password);
             session = sessionFactory.openSession();
             session.beginTransaction();
 
@@ -251,7 +251,9 @@ otherwise you may get cache errors.
             generateGarages();
             create_relations();
             List<Car>currrent = getAllCars();
+            System.out.print("\nSection 4_1:\n");
             Section4_1();
+            System.out.print("\nSection 4_2:\n");
             Section4_2();
 
 
