@@ -313,7 +313,7 @@ public class ArithmeticApp {
             if (answer != -1) {
                 //System.out.println("The value of the expression in base 10" + exp + " is: " + answer);
                 String final_answer = Integer.toString(answer, base).toUpperCase();
-                System.out.println("The value of expression " + exp + " is: " + final_answer);
+                System.out.println("The value of expression " + exp + " is : " + final_answer);
             }
         }
 

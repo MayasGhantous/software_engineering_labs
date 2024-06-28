@@ -2,12 +2,14 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Message implements Serializable {
     int id;
     LocalDateTime timeStamp;
     String message;
     String data;
+    private List<Movie> movies;
 
     public Message(int id, LocalDateTime timeStamp, String message) {
         this.id = id;
@@ -59,5 +61,12 @@ public class Message implements Serializable {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 }
