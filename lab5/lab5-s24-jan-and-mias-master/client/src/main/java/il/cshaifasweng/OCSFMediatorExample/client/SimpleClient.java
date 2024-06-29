@@ -25,15 +25,44 @@ public class SimpleClient extends AbstractClient {
 		if(message.getMessage().equals("Success, go to main page")){
 			System.out.println("here");
 			Current_Message = message;
+
 			Platform.runLater(() -> {
-				SimpleChatClient.setWindowTitle("title");
+				SimpleChatClient.setWindowTitle("editing_details");
 				try {
-					SimpleChatClient.setRoot("main_page");
+					SimpleChatClient.setRoot("Movie_editing_details");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
-        }else {
+        }
+		else if (message.getMessage().equals("#UpdateMovieList")){
+			if(SimpleChatClient.getWindowTitle().equals("editing_details"))
+			{
+				Current_Message = message;
+				Platform.runLater(() -> {
+					SimpleChatClient.setWindowTitle("editing_details");
+					try {
+						SimpleChatClient.setRoot("Movie_editing_details");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+
+			}
+
+		}
+		else if (message.getMessage().equals("#ScreeningsGot")){
+			Current_Message = message;
+			Platform.runLater(() -> {
+				SimpleChatClient.setWindowTitle("edit_screenings");
+				try {
+					SimpleChatClient.setRoot("EditScreening");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		}
+		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}

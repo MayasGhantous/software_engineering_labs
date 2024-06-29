@@ -17,7 +17,10 @@ public class Movie implements Serializable {
     private String category;
     private String description_;
     private String time_;
+    private String image_location;
     private int year_;
+    private int price;
+    private String director;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings = new ArrayList<Screening>();;
@@ -89,4 +92,20 @@ public class Movie implements Serializable {
     public void setYear_(int year_) {
         this.year_ = year_;
     }
+
+    public void setImageLocation(String image_location)
+    {
+        this.image_location = image_location;
+    }
+    public String getImage_location()
+    {
+        return image_location;
+    }
+    public List<Screening> getScreenings() {return screenings;}
+    public void setScreenings(List<Screening> screenings) {this.screenings = screenings;}
+
+    public void setPrice(int price){this.price = price;}
+    public int getPrice(){return price;}
+    public void setDirector(String director){this.director = director;}
+    public String getDirector(){return director;}
 }

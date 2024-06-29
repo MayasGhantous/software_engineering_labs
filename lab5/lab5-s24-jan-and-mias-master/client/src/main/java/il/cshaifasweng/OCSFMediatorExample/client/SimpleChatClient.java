@@ -37,6 +37,9 @@ public class SimpleChatClient extends Application {
     public static void setWindowTitle (String title) {
         appStage.setTitle(title);
     }
+    public static String getWindowTitle() {
+        return appStage.getTitle();
+    }
 
     public static void setRoot(String pageName) throws IOException {
         Parent root = loadFXML(pageName);

@@ -11,10 +11,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.Current_Message;
 import javax.swing.*;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.List;
 
