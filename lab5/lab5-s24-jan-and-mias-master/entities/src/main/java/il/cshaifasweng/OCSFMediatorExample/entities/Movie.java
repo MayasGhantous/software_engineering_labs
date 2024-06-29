@@ -1,21 +1,26 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
 public class Movie implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int auto_number_movie;
+
     private String movie_name;
     private String main_actors;
     private String category;
     private String description_;
     private String time_;
     private int year_;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Screening> screenings = new ArrayList<Screening>();;
 
     public Movie(int auto_number_movie, String movie_name, String main_actors, String category, String description_, String time_, int year_) {
         this.auto_number_movie = auto_number_movie;
@@ -25,6 +30,7 @@ public class Movie implements Serializable {
         this.description_ = description_;
         this.time_ = time_;
         this.year_ = year_;
+
     }
 
     public Movie() {

@@ -1,5 +1,6 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
+import com.sun.javafx.stage.EmbeddedWindow;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -22,18 +23,31 @@ public class SimpleChatClient extends Application {
 
     private static Scene scene;
     private SimpleClient client;
+    private static Stage appStage;
 
     @Override
     public void start(Stage stage) throws IOException {
     	EventBus.getDefault().register(this);
         scene = new Scene(loadFXML("host"), 640, 480);
+        appStage = stage;
         stage.setScene(scene);
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    public static void setWindowTitle (String title) {
+        appStage.setTitle(title);
     }
+
+    public static void setRoot(String pageName) throws IOException {
+        Parent root = loadFXML(pageName);
+        scene = new Scene(root);
+        appStage.setScene(scene);
+        appStage.show();
+    }
+
+    /*static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
+    }*/
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatClient.class.getResource(fxml + ".fxml"));

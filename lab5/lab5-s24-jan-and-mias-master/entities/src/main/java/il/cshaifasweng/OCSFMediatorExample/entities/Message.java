@@ -9,7 +9,7 @@ public class Message implements Serializable {
     LocalDateTime timeStamp;
     String message;
     String data;
-    private List<Movie> movies;
+    private Object object;
 
     public Message(int id, LocalDateTime timeStamp, String message) {
         this.id = id;
@@ -63,10 +63,10 @@ public class Message implements Serializable {
         this.data = data;
     }
 
-    public List<Movie> getMovies() {
-        return movies;
+    public Object getObject() {
+        return object;
     }
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
+    public void setObject(Object movies) {
+        this.object = movies;
     }
 }

@@ -1,27 +1,31 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "screening")
-public class Screening {
-    @Id
+public class Screening implements Serializable {
+
     @ManyToOne
-    @JoinColumn(name = "auto_number_movie")
+    @JoinColumn(name = "movie_id", referencedColumnName = "auto_number_movie")
     Movie movie;
+    @Id
     private int auto_number_movie;
-    private String time;
-    private String date;
+    private String time_;
+    private String date_;
     private int room_number;
+
 
     public Screening() {
     }
 
     public Screening(int auto_number_movie, String time, String date, int room_number) {
         this.auto_number_movie = auto_number_movie;
-        this.time = time;
-        this.date = date;
+        this.time_ = time;
+        this.date_ = date;
         this.room_number = room_number;
+        this.movie = new Movie();
     }
 
     // Getters and Setters
@@ -30,20 +34,17 @@ public class Screening {
         return auto_number_movie;
     }
 
-    public void setAuto_number_movie(int auto_number_movie) {
-        this.auto_number_movie = auto_number_movie;
-    }
     public String getTime() {
-        return time;
+        return time_;
     }
-    public void setTime(String time) {
-        this.time = time;
+    public void setTime(String time_) {
+        this.time_ = time_;
     }
     public String getDate() {
-        return date;
+        return date_;
     }
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String date_) {
+        this.date_ = date_;
     }
     public int getRoom_number() {
         return room_number;

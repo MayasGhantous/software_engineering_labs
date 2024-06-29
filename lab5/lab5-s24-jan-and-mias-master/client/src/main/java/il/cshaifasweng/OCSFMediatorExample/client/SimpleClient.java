@@ -2,15 +2,16 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
+import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
 
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
 
 import java.io.IOException;
-import java.util.List;
+
 
 public class SimpleClient extends AbstractClient {
-	public static List<Movie> movies;
+	public static Message Current_Message;
 	private static SimpleClient client = null;
 
 	public SimpleClient(String host, int port) {
@@ -19,15 +20,19 @@ public class SimpleClient extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
+		System.out.println("I got your message");
 		Message message = (Message) msg;
 		if(message.getMessage().equals("Success, go to main page")){
 			System.out.println("here");
-			movies = message.getMovies();
-            try {
-                SimpleChatClient.setRoot("main_page");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+			Current_Message = message;
+			Platform.runLater(() -> {
+				SimpleChatClient.setWindowTitle("title");
+				try {
+					SimpleChatClient.setRoot("main_page");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
         }else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}

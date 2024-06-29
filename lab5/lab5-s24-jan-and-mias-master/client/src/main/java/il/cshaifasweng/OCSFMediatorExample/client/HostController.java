@@ -23,8 +23,8 @@ public class HostController {
     @FXML
     public void submit_func(javafx.event.ActionEvent actionEvent) {
         String host = hostTextField.getText();
-        int port = Integer.parseInt(portTextField.getText());
-        client =  new SimpleClient(host,port);
+        int portg = Integer.parseInt(portTextField.getText());
+        client =  new SimpleClient(host,portg);
         try{
             client.openConnection();
             Message message = new Message(0,passwordTextField.getText());

@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.movies;
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.Current_Message;
 import javax.swing.*;
 import java.net.URL;
 import java.sql.Connection;
@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.List;
 
 
 public class MainPageController implements Initializable {
@@ -53,7 +54,7 @@ public class MainPageController implements Initializable {
         year.setCellValueFactory(new PropertyValueFactory<>("year_"));
 
         // Load the data from the database
-        list = FXCollections.observableArrayList(movies);
+        list = FXCollections.observableArrayList((List<Movie>)(Current_Message.getObject()));
         catalog.setItems(list);
     }
 }
