@@ -60,6 +60,7 @@
             <ImageView fx:id="selected_image" fitHeight="111.0" fitWidth="141.0" layoutX="355.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true" />
             <TextField fx:id="SearchText" layoutX="245.0" layoutY="16.0" />
             <Button layoutX="406.0" layoutY="17.0" mnemonicParsing="false" onAction="#search_movies" text="search" />
+            <Button layoutX="341.0" layoutY="141.0" mnemonicParsing="false" onAction="#change_all_prices" text="change all prices" />
          </children>
       </AnchorPane>
    </children>

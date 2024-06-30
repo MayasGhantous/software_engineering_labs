@@ -236,6 +236,16 @@ public class MovieEditingDetailsController {
         });
     }
 
+    @FXML
+    void change_all_prices(ActionEvent event) {
+        Message message = new Message(3,"#ChangeAllPrices");
+        message.setObject(Integer.parseInt(price.getText()));
+        try {
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void create_catalog(Message M)
     {
         Vbox_movies.getChildren().clear();

@@ -105,9 +105,7 @@ public class SimpleServer extends AbstractServer {
 	private void add_new_screening(Screening screening) throws Exception {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		screening.getMovie().getScreenings().add(screening);
-		session.update(screening.getMovie());
-		session.saveOrUpdate(screening);
+		session.save(screening);
 		session.getTransaction().commit();
 		session.close();
 	}
@@ -160,6 +158,31 @@ public class SimpleServer extends AbstractServer {
 		session.getTransaction().commit();
 		session.close();
 		return data;
+	}
+	private void update_screening(Screening screening)
+	{
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.update(screening);
+		session.getTransaction().commit();
+		session.close();
+
+
+	}
+	private void update_all_prices(int new_price) throws Exception
+	{
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		List<Movie> movies = getAllMovies();
+		for (Movie movie : movies)
+		{
+			movie.setPrice(new_price);
+			session.update(movie);
+
+		}
+		session.getTransaction().commit();
+		session.close();
+
 	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -235,7 +258,6 @@ public class SimpleServer extends AbstractServer {
 				List<String> key = (List<String>) message.getObject2();
 				message.setObject(screening);
 				message.setMessage("#UpdateBoxesInScreening");
-				message.setObject2(Screening.get_rows_and_columns(key));
 				client.sendToClient(message);
 			}
 			else if (message.getMessage().startsWith("#RemoveScreening")) {
@@ -256,6 +278,26 @@ public class SimpleServer extends AbstractServer {
 				message.setObject2(movie);
 				message.setMessage("#UpdateScreeningForMovie");
 				client.sendToClient(message);
+			}
+			else if (message.getMessage().equals("#UpdateScreening"))
+			{
+				Movie movie = ((Screening) message.getObject()).getMovie();
+				Screening screening =  (Screening)message.getObject();
+				update_screening(screening);
+				message.setObject(get_screening_for_movie(movie));
+				message.setObject2(movie);
+				message.setMessage("#UpdateScreeningForMovie");
+				sendToAllClients(message);
+
+			}
+			else if (message.getMessage().equals("#ChangeAllPrices"))
+			{
+				int new_price = (int)message.getObject();
+				update_all_prices(new_price);
+				message.setMessage("#UpdateMovieList");
+				message.setObject(getAllMovies());
+				client.sendToClient(message);
+
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

@@ -1,4 +1,5 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
+
 import static il.cshaifasweng.OCSFMediatorExample.client.MovieEditingDetailsController.go_to_screening_movie;
 
 import com.mysql.cj.protocol.x.XMessage;
@@ -17,6 +18,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.fxml.Initializable;
 import org.greenrobot.eventbus.EventBus;
@@ -128,6 +131,25 @@ public class EditScreeningController {
 
     @FXML
     void update_screning(ActionEvent event) {
+        String dateC = date.getText();
+        String timeC = screening_time.getText();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date real_date = null;
+        try {
+             real_date = formatter.parse(dateC+" "+timeC);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        current_screening.setDate_time(real_date);
+        Message message = new Message(10,"#UpdateScreening");
+        message.setObject(current_screening);
+
+        try {
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
@@ -156,8 +178,15 @@ public class EditScreeningController {
 
         int room = Integer.parseInt(room_number.getText());
         String theater = "";
-        for(int i=0 ; i<10;i++)
-            theater += "0, 0, 0, 0, 0, 0, 0, 0, 0, 0\n";
+        int rowc = Integer.parseInt(rows_number.getText());
+        int columnc = Integer.parseInt(column_number.getText());
+        for(int i=0 ; i<rowc;i++) {
+            for (int j = 0; j < columnc-1; j++) {
+                theater+="0, ";
+            }
+
+            theater+="0\n";
+        }
         Screening screening = new Screening(datec,room,theater,branch);
         screening.setMovie(current_movie);
 
@@ -165,7 +194,6 @@ public class EditScreeningController {
         message.setObject(screening);
 
         try {
-            SimpleClient.getClient().openConnection();
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
             System.out.print("aha3");
@@ -206,10 +234,18 @@ public class EditScreeningController {
         room_number.setText(room_column.getCellData(index).toString());
         Message message = new Message(4,"#get_theater_and_room_map");
         message.setObject(id_column.getCellData(index).toString());
-        List<String> list1 = new ArrayList<>();
-        list1.add(branch_column.getCellData(index));
-        list1.add(room_column.getCellData(index).toString());
-        message.setObject2(list1);
+
+        List<String> key = Arrays.asList(branch_column.getCellData(index).toString(),room_column.getCellData(index).toString());
+        List<Integer> row_col= SimpleChatClient.get_rows_and_columns(key);
+        if(row_col != null) {
+            rows_number.setText(row_col.get(0).toString());
+            column_number.setText(row_col.get(1).toString());
+        }
+        else
+        {
+            rows_number.setText("");
+            column_number.setText("");
+        }
         try {
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
@@ -223,21 +259,37 @@ public class EditScreeningController {
     public void update_boxes(UpdateScreeningBoxesEvent event)
     {
         Platform.runLater(()->{
-            List<Integer> row_column =(List<Integer>) event.getMessage().getObject2();
             Screening screening = (Screening) event.getMessage().getObject();
             current_screening = screening;
             System.out.println("screening_auto_number:");
             System.out.println(screening.getAuto_number_screening());
             theater_map.setText(screening.getTheater_map());
-            if (row_column != null) {
-                rows_number.setText(row_column.get(0).toString());
-                column_number.setText(row_column.get(1).toString());
-            }
         });
+    }
+    @FXML
+    void back_to_catalog(ActionEvent event) {
+        Message message = new Message(0,"");
+        try {
+            SimpleClient.getClient().sendToServer(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
-    void get_row_column(ActionEvent event) {
+    void get_row_column(KeyEvent event) {
+        List<String> key = Arrays.asList(Branch.getValue().toString(),room_number.getText().toString());
+        List<Integer> row_col= SimpleChatClient.get_rows_and_columns(key);
+        if(row_col != null) {
+            rows_number.setText(row_col.get(0).toString());
+            column_number.setText(row_col.get(1).toString());
+        }
+        else
+        {
+            rows_number.setText("");
+            column_number.setText("");
+        }
+
 
     }
 

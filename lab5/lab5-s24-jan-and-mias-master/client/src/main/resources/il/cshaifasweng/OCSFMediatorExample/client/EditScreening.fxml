@@ -35,8 +35,8 @@
       <Text layoutX="17.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:" />
       <TextField fx:id="date" layoutX="55.0" layoutY="124.0" />
       <Text layoutX="91.0" layoutY="33.0" onMouseClicked="#select_screening" strokeType="OUTSIDE" strokeWidth="0.0" text="Room:" />
-      <TextField fx:id="room_number" layoutX="130.0" layoutY="15.0" onAction="#get_row_column" prefHeight="26.0" prefWidth="42.0" />
-      <ComboBox fx:id="Branch" layoutX="62.0" layoutY="59.0" prefHeight="26.0" prefWidth="82.0" />
+      <TextField fx:id="room_number" layoutX="130.0" layoutY="15.0" onKeyTyped="#get_row_column" prefHeight="26.0" prefWidth="42.0" />
+      <ComboBox fx:id="Branch" layoutX="62.0" layoutY="59.0" prefHeight="26.0" prefWidth="113.0" />
       <Text layoutX="355.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search branch" />
       <ComboBox fx:id="search_branch_combobox" layoutX="436.0" layoutY="60.0" onAction="#search" prefWidth="150.0" />
       <Text layoutX="266.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="theater map:" />
@@ -46,8 +46,9 @@
       <Button fx:id="update" layoutX="240.0" layoutY="168.0" mnemonicParsing="false" onAction="#update_screning" text="update" />
       <Text fx:id="ErrorMessage" fill="#e71010" layoutX="222.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" />
       <Text layoutX="180.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="rows:" />
-      <TextField fx:id="rows_number" disable="true" editable="false" layoutX="215.0" layoutY="15.0" prefHeight="26.0" prefWidth="34.0" />
+      <TextField fx:id="rows_number" disable="true" layoutX="215.0" layoutY="15.0" prefHeight="26.0" prefWidth="34.0" />
       <Text layoutX="256.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="column:" />
-      <TextField fx:id="column_number" disable="true" editable="false" layoutX="308.0" layoutY="15.0" prefHeight="26.0" prefWidth="34.0" />
+      <TextField fx:id="column_number" disable="true" layoutX="308.0" layoutY="15.0" prefHeight="26.0" prefWidth="34.0" />
+      <Button layoutX="19.0" layoutY="168.0" mnemonicParsing="false" onAction="#back_to_catalog" text="back" />
    </children>
 </AnchorPane>

@@ -9,9 +9,8 @@ import java.util.*;
 @Table(name = "screening")
 public class Screening implements Serializable {
 
-    private static Map<List<String>,List<Integer>> rooms = new HashMap<List<String>,List<Integer>>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", referencedColumnName = "auto_number_movie")
     Movie movie;
     @Id
@@ -66,17 +65,6 @@ public class Screening implements Serializable {
     public String getBranch() {return branch;}
     public void setBranch(String branch) {this.branch = branch;}
 
-    public static void add_to_rooms(String Branch,int room_number,int row_size,int column_size) {
-        ArrayList<String> keys = new ArrayList<>();
-        keys.add(Branch);
-        keys.add(String.valueOf(room_number));
-        ArrayList<Integer>values = new ArrayList<Integer>();
-        values.add(row_size);
-        values.add(column_size);
-        rooms.put(keys,values);
-    }
-    public static List<Integer> get_rows_and_columns(List<String> keys) {
-        return rooms.get(keys);
-    }
+
 
 }
