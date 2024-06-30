@@ -53,5 +53,6 @@ public class MainPageController implements Initializable {
         list = FXCollections.observableArrayList((List<Movie>)(Current_Message.getObject()));
         catalog.setItems(list);
     }
+
 }
 

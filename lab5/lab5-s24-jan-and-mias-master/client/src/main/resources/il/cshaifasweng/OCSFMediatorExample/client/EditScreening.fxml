@@ -10,16 +10,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.EditScreeningController">
    <children>
       <TableView fx:id="table_view" layoutX="209.0" layoutY="212.8" prefHeight="187.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="213.0">
         <columns>
-          <TableColumn prefWidth="26.39996337890625" text="ID" />
-          <TableColumn prefWidth="57.5999755859375" text="Branch" />
-            <TableColumn prefWidth="95.20001220703125" text="Screening Time" />
-            <TableColumn minWidth="7.20001220703125" prefWidth="111.20001220703125" text="Date" />
-            <TableColumn prefWidth="62.4000244140625" text="Room" />
+          <TableColumn fx:id="id_column" prefWidth="26.39996337890625" text="ID" />
+          <TableColumn fx:id="branch_column" prefWidth="57.5999755859375" text="Branch" />
+            <TableColumn fx:id="screening_time_column" prefWidth="95.20001220703125" text="Screening Time" />
+            <TableColumn fx:id="date_column" minWidth="7.20001220703125" prefWidth="111.20001220703125" text="Date" />
+            <TableColumn fx:id="room_column" prefWidth="62.4000244140625" text="Room" />
         </columns>
       </TableView>
       <Text fx:id="Movie_name" layoutX="380.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie Name" wrappingWidth="186.91680908203125">

@@ -3,6 +3,7 @@ import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.Current_Me
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -132,6 +133,7 @@ public class MovieEditingDetailsController implements Initializable {
         File_uploaded = null;
 
 
+
     }
 
     private File File_uploaded;
@@ -155,12 +157,19 @@ public class MovieEditingDetailsController implements Initializable {
     void search_movies(ActionEvent event) {
         Message message = new Message(3,"#SearchMovies");
         message.setObject(SearchText.getText());
-        try {
-            SimpleClient.getClient().openConnection();
-            SimpleClient.getClient().sendToServer(message);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+            try {
+                SimpleClient.getClient().openConnection();
+                SimpleClient.getClient().sendToServer(message);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+
+
     }
 
     @FXML
@@ -210,6 +219,7 @@ public class MovieEditingDetailsController implements Initializable {
         try {
             SimpleClient.getClient().openConnection();
             SimpleClient.getClient().sendToServer(insert_message);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -219,17 +229,10 @@ public class MovieEditingDetailsController implements Initializable {
     }
     private static Movie SelectedMovie;
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void create_catalog()
+    {
+        Vbox_movies.getChildren().clear();
         List<Movie> movies = (List<Movie>)Current_Message.getObject();
-        catgory.getItems().add("Comedy");
-        catgory.getItems().add("Sci-Fi");
-        catgory.getItems().add("Action");
-        catgory.getItems().add("Romance");
-        catgory.getItems().add("Family");
-
-
         for (Movie movie : movies) {
             HBox hbox_movies = new HBox();
             hbox_movies.setSpacing(10);
@@ -302,12 +305,15 @@ public class MovieEditingDetailsController implements Initializable {
             });
             vboxButtons.getChildren().add(Button_Select);
 
+
+
             Button go_to_screening_Button = new Button();
             go_to_screening_Button.setText("Screenings");
             go_to_screening_Button.setOnAction(event->{
                 Message screening_message = new Message(2, "#GoToScreenings");
                 screening_message.setObject(movie);
                 try {
+                    go_to_screening_movie = movie;
                     SimpleClient.getClient().openConnection();
                     SimpleClient.getClient().sendToServer(screening_message);
                 } catch (IOException e) {
@@ -321,6 +327,18 @@ public class MovieEditingDetailsController implements Initializable {
             hbox_movies.getChildren().add(vboxButtons);
             Vbox_movies.getChildren().add(hbox_movies);
         }
+    }
+    public static Movie go_to_screening_movie;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        catgory.getItems().add("Comedy");
+        catgory.getItems().add("Sci-Fi");
+        catgory.getItems().add("Action");
+        catgory.getItems().add("Romance");
+        catgory.getItems().add("Family");
+        create_catalog();
 
     }
 

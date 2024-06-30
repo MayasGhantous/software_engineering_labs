@@ -22,7 +22,7 @@ public class Movie implements Serializable {
     private int price;
     private String director;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "movie",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings = new ArrayList<Screening>();;
 
     public Movie(int auto_number_movie, String movie_name, String main_actors, String category, String description_, String time_, int year_) {
@@ -108,4 +108,5 @@ public class Movie implements Serializable {
     public int getPrice(){return price;}
     public void setDirector(String director){this.director = director;}
     public String getDirector(){return director;}
+
 }

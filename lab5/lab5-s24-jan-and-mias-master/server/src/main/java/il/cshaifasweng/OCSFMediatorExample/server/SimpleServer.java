@@ -100,6 +100,19 @@ public class SimpleServer extends AbstractServer {
 		session.close();
 		return data;
 	}
+	private void add_new_screening(Screening screening) throws Exception {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		screening.getMovie().getScreenings().add(screening);
+		session.update(screening.getMovie());
+		session.saveOrUpdate(screening);
+		session.getTransaction().commit();
+		session.close();
+	}
+	private List<Screening> get_screening_for_movie(Movie movie)
+	{
+		return movie.getScreenings();
+	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		System.out.println("I got your message");
@@ -123,6 +136,8 @@ public class SimpleServer extends AbstractServer {
 			else if (message.getMessage().startsWith("#GoToScreenings"))
 			{
 				Movie movie = (Movie)message.getObject();
+				System.out.println("screening number");
+				System.out.println(movie.getScreenings().size());
 				message.setObject(movie.getScreenings());
 				message.setMessage("#ScreeningsGot");
 				client.sendToClient(message);
@@ -150,7 +165,15 @@ public class SimpleServer extends AbstractServer {
 				message.setObject(get_movies_by_name(movieName));
 				message.setMessage("#UpdateMovieList");
 				client.sendToClient(message);
+			}
+			else if(message.getMessage().startsWith("#AddNewScreening"))
+			{
+				Screening screening = (Screening)message.getObject();
 
+				add_new_screening(screening);
+				message.setMessage("#AddNewScreening");
+				message.setObject(get_screening_for_movie(screening.getMovie()));
+				client.sendToClient(message);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

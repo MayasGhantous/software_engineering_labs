@@ -14,6 +14,7 @@ public class SimpleClient extends AbstractClient {
 	public static Message Current_Message;
 	private static SimpleClient client = null;
 
+
 	public SimpleClient(String host, int port) {
 		super(host, port);
 	}
@@ -61,6 +62,18 @@ public class SimpleClient extends AbstractClient {
 					e.printStackTrace();
 				}
 			});
+		}
+		else if (message.getMessage().equals("#AddNewScreening"))
+		{
+			Current_Message = message;
+			Platform.runLater(() -> {
+				SimpleChatClient.setWindowTitle("edit_screening");
+                try {
+                    SimpleChatClient.setRoot("EditScreening");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 		}
 		else {
 			EventBus.getDefault().post(new MessageEvent(message));
