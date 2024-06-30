@@ -19,6 +19,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.EventBus;
 import org.hibernate.type.TrueFalseType;
 
 
@@ -36,7 +38,7 @@ import java.util.ResourceBundle;
 
 
 
-public class MovieEditingDetailsController implements Initializable {
+public class MovieEditingDetailsController {
 
     @FXML
     private Text ErrorMessage;
@@ -125,7 +127,6 @@ public class MovieEditingDetailsController implements Initializable {
         Message insert_message = new Message(3,"#InsertMovie");
         insert_message.setObject(movie);
         try {
-            SimpleClient.getClient().openConnection();
             SimpleClient.getClient().sendToServer(insert_message);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -159,7 +160,6 @@ public class MovieEditingDetailsController implements Initializable {
         message.setObject(SearchText.getText());
 
             try {
-                SimpleClient.getClient().openConnection();
                 SimpleClient.getClient().sendToServer(message);
 
             } catch (IOException e) {
@@ -217,7 +217,6 @@ public class MovieEditingDetailsController implements Initializable {
         Message insert_message = new Message(3,"#UpdateMovie");
         insert_message.setObject(movie);
         try {
-            SimpleClient.getClient().openConnection();
             SimpleClient.getClient().sendToServer(insert_message);
 
         } catch (IOException e) {
@@ -229,10 +228,18 @@ public class MovieEditingDetailsController implements Initializable {
     }
     private static Movie SelectedMovie;
 
-    public void create_catalog()
+    @Subscribe
+    public void create_catlog_event(UpdateCatalogEvent E)
+    {
+        Platform.runLater(()->{
+            create_catalog(E.getMessage());
+        });
+    }
+
+    public void create_catalog(Message M)
     {
         Vbox_movies.getChildren().clear();
-        List<Movie> movies = (List<Movie>)Current_Message.getObject();
+        List<Movie> movies = (List<Movie>)M.getObject();
         for (Movie movie : movies) {
             HBox hbox_movies = new HBox();
             hbox_movies.setSpacing(10);
@@ -274,7 +281,6 @@ public class MovieEditingDetailsController implements Initializable {
                 Message delete_message = new Message(1, "#DeleteMovie");
                 delete_message.setObject(movie);
                 try {
-                    SimpleClient.getClient().openConnection();
                     SimpleClient.getClient().sendToServer(delete_message);
                 } catch (IOException e) {
                     ErrorMessage.setText("movie did not get deleted");
@@ -314,7 +320,6 @@ public class MovieEditingDetailsController implements Initializable {
                 screening_message.setObject(movie);
                 try {
                     go_to_screening_movie = movie;
-                    SimpleClient.getClient().openConnection();
                     SimpleClient.getClient().sendToServer(screening_message);
                 } catch (IOException e) {
                     ErrorMessage.setText("cant go to screening");
@@ -328,17 +333,20 @@ public class MovieEditingDetailsController implements Initializable {
             Vbox_movies.getChildren().add(hbox_movies);
         }
     }
+
     public static Movie go_to_screening_movie;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
+    @FXML
+    public void initialize() {
+        EventBus.getDefault().register(this);
+        System.out.println(EventBus.getDefault().isRegistered(this));
         catgory.getItems().add("Comedy");
         catgory.getItems().add("Sci-Fi");
         catgory.getItems().add("Action");
         catgory.getItems().add("Romance");
         catgory.getItems().add("Family");
-        create_catalog();
+        create_catalog(Current_Message);
 
     }
 

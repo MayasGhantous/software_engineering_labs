@@ -1,5 +1,4 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
-
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Movie;
 import javafx.application.Platform;
@@ -12,7 +11,7 @@ import java.io.IOException;
 
 public class SimpleClient extends AbstractClient {
 	public static Message Current_Message;
-	private static SimpleClient client = null;
+	public static SimpleClient client = null;
 
 
 	public SimpleClient(String host, int port) {
@@ -21,7 +20,6 @@ public class SimpleClient extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
-		System.out.println("I got your message");
 		Message message = (Message) msg;
 		if(message.getMessage().equals("Success, go to main page")){
 			System.out.println("here");
@@ -37,20 +35,8 @@ public class SimpleClient extends AbstractClient {
 			});
         }
 		else if (message.getMessage().equals("#UpdateMovieList")){
-			if(SimpleChatClient.getWindowTitle().equals("editing_details"))
-			{
-				Current_Message = message;
-				Platform.runLater(() -> {
-					SimpleChatClient.setWindowTitle("editing_details");
-					try {
-						SimpleChatClient.setRoot("Movie_editing_details");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				});
 
-			}
-
+			EventBus.getDefault().post(new UpdateCatalogEvent(message));
 		}
 		else if (message.getMessage().equals("#ScreeningsGot")){
 			Current_Message = message;
@@ -63,18 +49,16 @@ public class SimpleClient extends AbstractClient {
 				}
 			});
 		}
-		else if (message.getMessage().equals("#AddNewScreening"))
+		else if (message.getMessage().equals("#UpdateScreeningForMovie"))
 		{
-			Current_Message = message;
-			Platform.runLater(() -> {
-				SimpleChatClient.setWindowTitle("edit_screening");
-                try {
-                    SimpleChatClient.setRoot("EditScreening");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+			EventBus.getDefault().post(new UpdateScreeningForMovieEvent(message));
 		}
+		else if (message.getMessage().equals("#UpdateBoxesInScreening"))
+		{
+			System.out.println("I got your message");
+			EventBus.getDefault().post(new UpdateScreeningBoxesEvent(message));
+		}
+
 		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}

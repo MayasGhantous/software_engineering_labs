@@ -7,8 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
+import org.greenrobot.eventbus.EventBus;
+
 import java.awt.*;
 import java.io.IOException;
+import static il.cshaifasweng.OCSFMediatorExample.client.SimpleClient.client;
 
 public class HostController {
 
@@ -18,7 +21,6 @@ public class HostController {
     private TextField portTextField;
     @FXML
     private TextField passwordTextField;
-    SimpleClient client;
 
     @FXML
     public void submit_func(javafx.event.ActionEvent actionEvent) {

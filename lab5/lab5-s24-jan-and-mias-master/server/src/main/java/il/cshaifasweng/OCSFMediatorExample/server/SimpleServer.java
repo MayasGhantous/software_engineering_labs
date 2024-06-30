@@ -1,5 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
+
+
 import com.mysql.cj.xdevapi.Client;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Screening;
@@ -111,16 +113,63 @@ public class SimpleServer extends AbstractServer {
 	}
 	private List<Screening> get_screening_for_movie(Movie movie)
 	{
-		return movie.getScreenings();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Screening> query = builder.createQuery(Screening.class);
+		Root<Screening> root =  query.from(Screening.class);
+		query.select(root).where(builder.equal(root.get("movie"), movie));
+		List<Screening> data = session.createQuery(query).getResultList();
+		session.getTransaction().commit();
+		session.close();
+		return data;
+	}
+	private Screening get_screening(int screening_id)
+	{
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Screening> query = builder.createQuery(Screening.class);
+		Root<Screening> root =  query.from(Screening.class);
+		query.select(root).where(builder.equal(root.get("auto_number_screening"), screening_id));
+		Screening data = session.createQuery(query).uniqueResult();
+		session.getTransaction().commit();
+		session.close();
+		return data;
+
+
+	}
+	private void remove_screening(Screening screening) throws Exception {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.delete(screening);
+		session.getTransaction().commit();
+		session.close();
+	}
+	private List<Screening> search_sreening_branch_and_movie(String branch,Movie movie) throws Exception {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Screening> query = builder.createQuery(Screening.class);
+		Root<Screening> root =  query.from(Screening.class);
+		Predicate predicate_branch =  builder.like(root.get("branch"), "%"+branch+"%");
+		Predicate predicate_movie =  builder.equal(root.get("movie"), movie);
+		query.select(root).where(builder.and(predicate_branch, predicate_movie));
+
+		List<Screening> data = session.createQuery(query).getResultList();
+		session.getTransaction().commit();
+		session.close();
+		return data;
 	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		System.out.println("I got your message");
 		Message message = (Message) msg;
 		String request = message.getMessage();
 
 		try {
 			if(message.getId()==0){
+				SubscribedClient connection = new SubscribedClient(client);
+				SubscribersList.add(connection);
 				List<Movie> movies = getAllMovies();
 				message.setObject(movies);
 				message.setMessage("Success, go to main page");
@@ -131,7 +180,7 @@ public class SimpleServer extends AbstractServer {
 				remove_movie(movie);
 				message.setObject(getAllMovies());
 				message.setMessage("#UpdateMovieList");
-				client.sendToClient(message);
+				sendToAllClients(message);
 			}
 			else if (message.getMessage().startsWith("#GoToScreenings"))
 			{
@@ -149,7 +198,7 @@ public class SimpleServer extends AbstractServer {
 				insert_movie(movie);
 				message.setObject(getAllMovies());
 				message.setMessage("#UpdateMovieList");
-				client.sendToClient(message);
+				sendToAllClients(message);
 			}
 			else if (message.getMessage().startsWith("#UpdateMovie"))
 			{
@@ -157,7 +206,7 @@ public class SimpleServer extends AbstractServer {
 				update_movie(movie);
 				message.setObject(getAllMovies());
 				message.setMessage("#UpdateMovieList");
-				client.sendToClient(message);
+				sendToAllClients(message);
 			}
 			else if (message.getMessage().startsWith("#SearchMovies"))
 			{
@@ -171,8 +220,41 @@ public class SimpleServer extends AbstractServer {
 				Screening screening = (Screening)message.getObject();
 
 				add_new_screening(screening);
-				message.setMessage("#AddNewScreening");
+				message.setMessage("#UpdateScreeningForMovie");
+				message.setObject2(screening.getMovie());
 				message.setObject(get_screening_for_movie(screening.getMovie()));
+
+				sendToAllClients(message);
+			}
+			else if (message.getMessage().startsWith("#get_theater_and_room_map"))
+			{
+				System.out.println("I got your message");
+				int screening_id = Integer.parseInt((String)message.getObject());
+				Screening screening = get_screening(screening_id);
+
+				List<String> key = (List<String>) message.getObject2();
+				message.setObject(screening);
+				message.setMessage("#UpdateBoxesInScreening");
+				message.setObject2(Screening.get_rows_and_columns(key));
+				client.sendToClient(message);
+			}
+			else if (message.getMessage().startsWith("#RemoveScreening")) {
+				Movie movie = ((Screening)message.getObject()).getMovie();
+				Screening screening =  (Screening)message.getObject();
+				remove_screening(screening);
+				message.setObject(get_screening_for_movie(movie));
+				message.setObject2(movie);
+				message.setMessage("#UpdateScreeningForMovie");
+				sendToAllClients(message);
+			}
+			else if (message.getMessage().equals("#SearchBranchForScreening"))
+			{
+				Movie movie = (Movie) message.getObject();
+				String Branch = (String)message.getObject2();
+				List<Screening> screenings = search_sreening_branch_and_movie(Branch, movie);
+				message.setObject(screenings);
+				message.setObject2(movie);
+				message.setMessage("#UpdateScreeningForMovie");
 				client.sendToClient(message);
 			}
 		} catch (IOException e1) {

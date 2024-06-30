@@ -2,12 +2,14 @@ package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.sql.Time;
+import java.util.*;
+
 
 @Entity
 @Table(name = "screening")
 public class Screening implements Serializable {
+
+    private static Map<List<String>,List<Integer>> rooms = new HashMap<List<String>,List<Integer>>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", referencedColumnName = "auto_number_movie")
@@ -15,9 +17,13 @@ public class Screening implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int auto_number_screening;
-    private Time time_;
-    private Date date_;
+
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date_time;
+
     private int room_number;
+    @Column(columnDefinition = "VARCHAR(5000)")
     private String theater_map;
     private String branch;
 
@@ -25,9 +31,8 @@ public class Screening implements Serializable {
     public Screening() {
     }
 
-    public Screening(Time time, Date date, int room_number, String theater_map, String branch) {
-        this.time_ = time;
-        this.date_ = date;
+    public Screening(Date date_time, int room_number, String theater_map, String branch) {
+        this.date_time = date_time;
         this.room_number = room_number;
         this.theater_map = theater_map;
         this.branch = branch;
@@ -40,17 +45,11 @@ public class Screening implements Serializable {
         return auto_number_screening;
     }
 
-    public Time getTime() {
-        return time_;
+    public Date getDate_time() {
+        return date_time;
     }
-    public void setTime(Time time_) {
-        this.time_ = time_;
-    }
-    public Date getDate() {
-        return date_;
-    }
-    public void setDate(Date date_) {
-        this.date_ = date_;
+    public void setDate_time(Date date_time) {
+        this.date_time = date_time;
     }
     public int getRoom_number() {
         return room_number;
@@ -66,5 +65,18 @@ public class Screening implements Serializable {
     public void setTheater_map(String theater_map) {this.theater_map = theater_map;}
     public String getBranch() {return branch;}
     public void setBranch(String branch) {this.branch = branch;}
+
+    public static void add_to_rooms(String Branch,int room_number,int row_size,int column_size) {
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add(Branch);
+        keys.add(String.valueOf(room_number));
+        ArrayList<Integer>values = new ArrayList<Integer>();
+        values.add(row_size);
+        values.add(column_size);
+        rooms.put(keys,values);
+    }
+    public static List<Integer> get_rows_and_columns(List<String> keys) {
+        return rooms.get(keys);
+    }
 
 }

@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.EditScreeningController">
    <children>
-      <TableView fx:id="table_view" layoutX="209.0" layoutY="212.8" prefHeight="187.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="213.0">
+      <TableView fx:id="table_view" layoutX="209.0" layoutY="212.8" onMouseClicked="#select_screening" prefHeight="187.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="213.0">
         <columns>
           <TableColumn fx:id="id_column" prefWidth="26.39996337890625" text="ID" />
           <TableColumn fx:id="branch_column" prefWidth="57.5999755859375" text="Branch" />
@@ -34,8 +34,8 @@
       <TextField fx:id="screening_time" layoutX="109.0" layoutY="91.0" prefHeight="26.0" prefWidth="82.0" />
       <Text layoutX="17.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:" />
       <TextField fx:id="date" layoutX="55.0" layoutY="124.0" />
-      <Text layoutX="17.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room:" />
-      <TextField fx:id="room_number" layoutX="62.0" layoutY="154.0" prefHeight="26.0" prefWidth="42.0" />
+      <Text layoutX="91.0" layoutY="33.0" onMouseClicked="#select_screening" strokeType="OUTSIDE" strokeWidth="0.0" text="Room:" />
+      <TextField fx:id="room_number" layoutX="130.0" layoutY="15.0" onAction="#get_row_column" prefHeight="26.0" prefWidth="42.0" />
       <ComboBox fx:id="Branch" layoutX="62.0" layoutY="59.0" prefHeight="26.0" prefWidth="82.0" />
       <Text layoutX="355.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search branch" />
       <ComboBox fx:id="search_branch_combobox" layoutX="436.0" layoutY="60.0" onAction="#search" prefWidth="150.0" />
@@ -45,5 +45,9 @@
       <Button fx:id="remove" layoutX="177.0" layoutY="168.0" mnemonicParsing="false" onAction="#remove_screening" text="remove" />
       <Button fx:id="update" layoutX="240.0" layoutY="168.0" mnemonicParsing="false" onAction="#update_screning" text="update" />
       <Text fx:id="ErrorMessage" fill="#e71010" layoutX="222.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" />
+      <Text layoutX="180.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="rows:" />
+      <TextField fx:id="rows_number" disable="true" editable="false" layoutX="215.0" layoutY="15.0" prefHeight="26.0" prefWidth="34.0" />
+      <Text layoutX="256.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="column:" />
+      <TextField fx:id="column_number" disable="true" editable="false" layoutX="308.0" layoutY="15.0" prefHeight="26.0" prefWidth="34.0" />
    </children>
 </AnchorPane>
