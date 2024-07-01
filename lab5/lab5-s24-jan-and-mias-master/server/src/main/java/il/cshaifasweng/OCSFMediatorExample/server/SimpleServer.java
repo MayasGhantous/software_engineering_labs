@@ -198,14 +198,14 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage("Success, go to main page");
 				client.sendToClient(message);
 			}
-			else if (message.getMessage().startsWith("#DeleteMovie")){
+			else if (message.getMessage().equals("#DeleteMovie")){
 				Movie movie = (Movie)message.getObject();
 				remove_movie(movie);
 				message.setObject(getAllMovies());
 				message.setMessage("#UpdateMovieList");
 				sendToAllClients(message);
 			}
-			else if (message.getMessage().startsWith("#GoToScreenings"))
+			else if (message.getMessage().equals("#GoToScreenings"))
 			{
 				Movie movie = (Movie)message.getObject();
 				System.out.println("screening number");
@@ -215,15 +215,18 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 
 			}
-			else if (message.getMessage().startsWith("#InsertMovie"))
+			else if (message.getMessage().equals("#InsertMovie"))
 			{
 				Movie movie = (Movie)message.getObject();
 				insert_movie(movie);
 				message.setObject(getAllMovies());
 				message.setMessage("#UpdateMovieList");
 				sendToAllClients(message);
+				Message message1 = new Message(10,"#ChangeMovieIdBox");
+				message1.setObject(movie);
+				client.sendToClient(message1);
 			}
-			else if (message.getMessage().startsWith("#UpdateMovie"))
+			else if (message.getMessage().equals("#UpdateMovie"))
 			{
 				Movie movie = (Movie)message.getObject();
 				update_movie(movie);
@@ -231,14 +234,14 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage("#UpdateMovieList");
 				sendToAllClients(message);
 			}
-			else if (message.getMessage().startsWith("#SearchMovies"))
+			else if (message.getMessage().equals("#SearchMovies"))
 			{
 				String movieName = (String)message.getObject();
 				message.setObject(get_movies_by_name(movieName));
-				message.setMessage("#UpdateMovieList");
+				message.setMessage("#UpdateMovieList_Eatch");
 				client.sendToClient(message);
 			}
-			else if(message.getMessage().startsWith("#AddNewScreening"))
+			else if(message.getMessage().equals("#AddNewScreening"))
 			{
 				Screening screening = (Screening)message.getObject();
 
@@ -248,19 +251,19 @@ public class SimpleServer extends AbstractServer {
 				message.setObject(get_screening_for_movie(screening.getMovie()));
 
 				sendToAllClients(message);
-			}
-			else if (message.getMessage().startsWith("#get_theater_and_room_map"))
-			{
-				System.out.println("I got your message");
-				int screening_id = Integer.parseInt((String)message.getObject());
-				Screening screening = get_screening(screening_id);
+				Message message1 = new Message(20,"#UpdateBoxesInScreening");
+				message1.setObject(screening);
 
-				List<String> key = (List<String>) message.getObject2();
-				message.setObject(screening);
+				client.sendToClient(message1);
+			}
+			else if (message.getMessage().equals("#get_screening_from_id"))
+			{
+				int screening_id = (Integer)message.getObject();
+				message.setObject(get_screening(screening_id));
 				message.setMessage("#UpdateBoxesInScreening");
 				client.sendToClient(message);
 			}
-			else if (message.getMessage().startsWith("#RemoveScreening")) {
+			else if (message.getMessage().equals("#RemoveScreening")) {
 				Movie movie = ((Screening)message.getObject()).getMovie();
 				Screening screening =  (Screening)message.getObject();
 				remove_screening(screening);
@@ -276,7 +279,7 @@ public class SimpleServer extends AbstractServer {
 				List<Screening> screenings = search_sreening_branch_and_movie(Branch, movie);
 				message.setObject(screenings);
 				message.setObject2(movie);
-				message.setMessage("#UpdateScreeningForMovie");
+				message.setMessage("#UpdateScreeningForMovie_each");
 				client.sendToClient(message);
 			}
 			else if (message.getMessage().equals("#UpdateScreening"))
@@ -284,6 +287,7 @@ public class SimpleServer extends AbstractServer {
 				Movie movie = ((Screening) message.getObject()).getMovie();
 				Screening screening =  (Screening)message.getObject();
 				update_screening(screening);
+
 				message.setObject(get_screening_for_movie(movie));
 				message.setObject2(movie);
 				message.setMessage("#UpdateScreeningForMovie");

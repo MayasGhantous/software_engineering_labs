@@ -29,6 +29,7 @@ import javafx.util.converter.DateStringConverter;
 import javafx.scene.input.MouseEvent;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,34 +104,63 @@ public class EditScreeningController {
     @FXML
     private Button update;
 
+    public void search_branch_function() {
+        Message message = new Message(8,"#SearchBranchForScreening");
+        message.setObject(current_movie);
+        if(search_branch_combobox.getValue() != null)
+            message.setObject2(search_branch_combobox.getValue().toString());
+        else
+            message.setObject2("");
 
-    @FXML
-    void remove_screening(ActionEvent event) {
-        Message message = new Message(10,"#RemoveScreening");
-        message.setObject(current_screening);
         try {
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @FXML
+    void remove_screening(ActionEvent event) {
+        ErrorMessage.setVisible(false);
+        if(Screening_ID.getText().trim().isEmpty())
+        {
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("select a screening");
+        }
+        Message message = new Message(10,"#RemoveScreening");
+        message.setObject(current_screening);
+
+        try {
+            SimpleClient.getClient().sendToServer(message);
+            Screening_ID.setText("");
+            rows_number.setText("");
+            column_number.setText("");
+            screening_time.setText("");
+            theater_map.setText("");
+            date.setText("");
+            Branch.setValue("");
+            room_number.setText("");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     void search(ActionEvent event) {
-        Message message = new Message(8,"#SearchBranchForScreening");
-        message.setObject(current_movie);
-        message.setObject2(search_branch_combobox.getValue().toString());
-        try {
-            SimpleClient.getClient().sendToServer(message);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        search_branch_function();
     }
 
     @FXML
     void update_screning(ActionEvent event) {
+        ErrorMessage.setVisible(false);
+        if(Screening_ID.getText().trim().isEmpty())
+        {
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("select a screening");
+        }
+
         String dateC = date.getText();
         String timeC = screening_time.getText();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -144,8 +174,10 @@ public class EditScreeningController {
         Message message = new Message(10,"#UpdateScreening");
         message.setObject(current_screening);
 
+
         try {
             SimpleClient.getClient().sendToServer(message);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -155,6 +187,36 @@ public class EditScreeningController {
 
     @FXML
     void add_screening(ActionEvent event) {
+        ErrorMessage.setVisible(false);
+        if(Branch.getValue() == null || Branch.getValue().isEmpty())
+        {
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("Please select a Branch");
+            return;
+        }
+        if(room_number.getText().trim().isEmpty())
+        {
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("Please enter a Room Number");
+            return;
+        }
+        if (rows_number.getText().trim().isEmpty())
+        {
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("this branch does not have this room number");
+            return;
+        }
+        if(screening_time.getText().trim().isEmpty()){
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("Please enter a Screening Time");
+            return;
+        }
+        if (date.getText().trim().isEmpty()){
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("Please enter a Date");
+            return;
+
+        }
         String branch = Branch.getValue();
         SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -162,19 +224,26 @@ public class EditScreeningController {
         try {
              datec = targetFormat.parse(date.getText());
         } catch (ParseException e) {
-            System.out.print("aha1");
-            throw new RuntimeException(e);
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("date format dd/MM/yyyy");
+            return;
+
         }
         Date time1 = null;
         try {
             time1 = timeFormat.parse(screening_time.getText());
         } catch (ParseException e) {
-            System.out.print("aha2");
-            e.printStackTrace(); // Handle the ParseException appropriately
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText("screening time format HH:mm");
+            return;
+
         }
 
-        datec.setHours(time1.getHours());
-        datec.setMinutes(time1.getMinutes());
+        try {
+            datec = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(date.getText().trim()+" "+screening_time.getText().trim());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
         int room = Integer.parseInt(room_number.getText());
         String theater = "";
@@ -193,14 +262,22 @@ public class EditScreeningController {
         Message message = new Message(4,"#AddNewScreening");
         message.setObject(screening);
 
+
         try {
             SimpleClient.getClient().sendToServer(message);
+
         } catch (IOException e) {
-            System.out.print("aha3");
             throw new RuntimeException(e);
         }
 
 
+    }
+
+    @Subscribe
+    public void update_each_user(UpdateEachUserScreeningEvent event){
+        Platform.runLater(()->{
+            get_data(event.getMessage());
+        });
     }
 
     private ObservableList<Screening> list;
@@ -209,17 +286,13 @@ public class EditScreeningController {
     public void update_event(UpdateScreeningForMovieEvent event)
     {
         Platform.runLater(()->{
-
-            if(((Movie)event.getMessage().getObject2()).getAuto_number_movie() == current_movie.getAuto_number_movie())
-            {
-                get_data(event.getMessage());
-            }
-
+            search_branch_function();
         });
     }
 
     @FXML
     void select_screening(MouseEvent event) {
+        ErrorMessage.setVisible(false);
         int index = table_view.getSelectionModel().getSelectedIndex();
         if(index <= -1)
             return;
@@ -232,8 +305,6 @@ public class EditScreeningController {
         Date datec = date_column.getCellData(index);
         date.setText(dateFormatC.format(datec));
         room_number.setText(room_column.getCellData(index).toString());
-        Message message = new Message(4,"#get_theater_and_room_map");
-        message.setObject(id_column.getCellData(index).toString());
 
         List<String> key = Arrays.asList(branch_column.getCellData(index).toString(),room_column.getCellData(index).toString());
         List<Integer> row_col= SimpleChatClient.get_rows_and_columns(key);
@@ -246,6 +317,8 @@ public class EditScreeningController {
             rows_number.setText("");
             column_number.setText("");
         }
+        Message message = new Message(4,"#get_screening_from_id");
+        message.setObject(Integer.parseInt(id_column.getCellData(index).toString()));
         try {
             SimpleClient.getClient().sendToServer(message);
         } catch (IOException e) {
@@ -261,16 +334,17 @@ public class EditScreeningController {
         Platform.runLater(()->{
             Screening screening = (Screening) event.getMessage().getObject();
             current_screening = screening;
-            System.out.println("screening_auto_number:");
-            System.out.println(screening.getAuto_number_screening());
+            Screening_ID.setText(Integer.toString(current_screening.getAuto_number_screening()));
             theater_map.setText(screening.getTheater_map());
         });
     }
     @FXML
     void back_to_catalog(ActionEvent event) {
         Message message = new Message(0,"");
+
         try {
             SimpleClient.getClient().sendToServer(message);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -278,6 +352,10 @@ public class EditScreeningController {
 
     @FXML
     void get_row_column(KeyEvent event) {
+        if (Branch.getValue() == null)
+        {
+            return;
+        }
         List<String> key = Arrays.asList(Branch.getValue().toString(),room_number.getText().toString());
         List<Integer> row_col= SimpleChatClient.get_rows_and_columns(key);
         if(row_col != null) {
@@ -293,16 +371,7 @@ public class EditScreeningController {
 
     }
 
-    private void get_data(Message m)
-    {
-        /*@Id
-    private int auto_number_screening;
-    private Time time_;
-    private Date date_;
-    private int room_number;
-    private String theater_map;
-    private String branch;
-*/
+    private void get_data(Message m){
 
         id_column.setCellValueFactory(new PropertyValueFactory<>("auto_number_screening"));
         branch_column.setCellValueFactory(new PropertyValueFactory<>("branch"));

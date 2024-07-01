@@ -1,8 +1,10 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
+import java.io.DataInput;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,10 @@ public class Movie implements Serializable {
     private String main_actors;
     private String category;
     private String description_;
-    private String time_;
+
+    @Temporal(TemporalType.TIME)
+    private Date time_;
+
     private String image_location;
     private int year_;
     private int price;
@@ -25,7 +30,7 @@ public class Movie implements Serializable {
     @OneToMany(mappedBy = "movie",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings = new ArrayList<Screening>();;
 
-    public Movie(int auto_number_movie, String movie_name, String main_actors, String category, String description_, String time_, int year_) {
+    public Movie(int auto_number_movie, String movie_name, String main_actors, String category, String description_, Date time_, int year_) {
         this.auto_number_movie = auto_number_movie;
         this.movie_name = movie_name;
         this.main_actors = main_actors;
@@ -77,11 +82,11 @@ public class Movie implements Serializable {
         this.description_ = description_;
     }
 
-    public String getTime_() {
+    public Date getTime_() {
         return time_;
     }
 
-    public void setTime_(String time_) {
+    public void setTime_(Date time_) {
         this.time_ = time_;
     }
 

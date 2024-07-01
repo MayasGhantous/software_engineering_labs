@@ -55,10 +55,21 @@ public class SimpleClient extends AbstractClient {
 		}
 		else if (message.getMessage().equals("#UpdateBoxesInScreening"))
 		{
-			System.out.println("I got your message");
 			EventBus.getDefault().post(new UpdateScreeningBoxesEvent(message));
 		}
-
+		else if (message.getMessage().equals("#ChangeMovieIdBox"))
+		{
+			System.out.println("I got your message");
+			EventBus.getDefault().post(new UpdateMovieIdBoxEvent(message));
+		}
+		else if(message.getMessage().equals("#UpdateMovieList_Eatch"))
+		{
+			EventBus.getDefault().post(new UpdateEachUserCatalogEvent(message));
+		}
+		else if(message.getMessage().equals("#UpdateScreeningForMovie_each"))
+		{
+			EventBus.getDefault().post(new UpdateEachUserScreeningEvent(message));
+		}
 		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
