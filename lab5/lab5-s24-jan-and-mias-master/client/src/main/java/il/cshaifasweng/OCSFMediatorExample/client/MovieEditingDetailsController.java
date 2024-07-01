@@ -139,15 +139,7 @@ public class MovieEditingDetailsController {
             return;
         }
         File f = File_uploaded;
-        try {
-            Path destinationPath = Paths.get("src/main/resources/images", f.getName());
-            Files.copy(f.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
-        } catch (IOException e) {
-            ErrorMessage.setVisible(true);
-            ErrorMessage.setText("Error saving file: " + e.getMessage());
-            return;
-        }
         try{
             Integer.parseInt(year.getText());
         }
@@ -199,7 +191,7 @@ public class MovieEditingDetailsController {
         movie.setDirector(directorC);
         movie.setPrice(priceC);
         movie.setDescription_(descriptionC);
-        movie.setImageLocation(f.getName());
+        movie.setImageLocation(f);
 
         Message insert_message = new Message(3,"#InsertMovie");
         insert_message.setObject(movie);
@@ -308,15 +300,6 @@ public class MovieEditingDetailsController {
             return;
         }
         File f = File_uploaded;
-        try {
-            Path destinationPath = Paths.get("src/main/resources/images", f.getName());
-            Files.copy(f.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (IOException e) {
-            ErrorMessage.setVisible(true);
-            ErrorMessage.setText("Error saving file: " + e.getMessage());
-            return;
-        }
 
         try{
             Integer.parseInt(year.getText());
@@ -347,7 +330,6 @@ public class MovieEditingDetailsController {
             return;
 
         }
-        String image_name = movie.getImage_location();
         String name = movie_name.getText();
         String main_actor = lead_actor.getText();
         String catgoryC =catgory.getValue();
@@ -370,11 +352,11 @@ public class MovieEditingDetailsController {
         movie.setDirector(directorC);
         movie.setPrice(priceC);
         movie.setDescription_(descriptionC);
-        movie.setImageLocation(f.getName());
-        if (!image_name.equals( movie.getImage_location())) {
+        movie.setImageLocation(f);
+        /*if (!image_name.equals( movie.getImage_location())) {
             File f4 = new File("src/main/resources/images/"+image_name);
             f4.delete();
-        }
+        }*/
         Message insert_message = new Message(3,"#UpdateMovie");
         insert_message.setObject(movie);
 
@@ -452,9 +434,14 @@ public class MovieEditingDetailsController {
             HBox hbox_movies = new HBox();
             hbox_movies.setSpacing(10);
             ImageView imageView = new ImageView();
-            File file = new File ("src/main/resources/images/"+movie.getImage_location());
-            Image image = new Image(file.toURI().toString());
-            imageView.setImage(image);
+            File file = movie.getImage_location();
+            if(file != null) {
+                Image image = new Image(file.toURI().toString());
+                imageView.setImage(image);
+            }
+            else{
+                imageView.setImage(null);
+            }
             imageView.setFitWidth(200);
             imageView.setFitHeight(150);
             imageView.setPickOnBounds(true);
@@ -485,8 +472,8 @@ public class MovieEditingDetailsController {
             remove_movie.setText("Remove Movie");
             remove_movie.setOnAction(event->{
                 int current_movie_id = movie.getAuto_number_movie();
-                File f = new File("src/main/resources/images/"+movie.getImage_location());
-                f.delete();
+                /*File f = new File("src/main/resources/images/"+movie.getImage_location());
+                f.delete();*/
                 Message delete_message = new Message(1, "#DeleteMovie");
                 delete_message.setObject(movie);
 
@@ -517,10 +504,16 @@ public class MovieEditingDetailsController {
             Button Button_Select = new Button();
             Button_Select.setText("Select");
             Button_Select.setOnAction(event->{
-                File file1 = new File ("src/main/resources/images/"+movie.getImage_location());
+                File file1 = movie.getImage_location();
                 File_uploaded = file1;
-                Image image1 = new Image(file1.toURI().toString());
-                selected_image.setImage(image1);
+                if(file1!=null) {
+                    Image image1 = new Image(file1.toURI().toString());
+                    selected_image.setImage(image1);
+                }
+                else
+                {
+                    selected_image.setImage(null);
+                }
                 Movie_id.setText(Integer.toString(movie.getAuto_number_movie()));
                 movie_name.setText(movie.getMovie_name());
                 lead_actor.setText(movie.getMain_actors());

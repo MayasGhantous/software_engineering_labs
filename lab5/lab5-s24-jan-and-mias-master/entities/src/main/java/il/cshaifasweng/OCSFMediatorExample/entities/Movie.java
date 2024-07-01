@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.io.File;
 
 @Entity
 @Table(name = "movies")
@@ -22,7 +23,7 @@ public class Movie implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date time_;
 
-    private String image_location;
+    private File image_movie;
     private int year_;
     private int price;
     private String director;
@@ -98,13 +99,13 @@ public class Movie implements Serializable {
         this.year_ = year_;
     }
 
-    public void setImageLocation(String image_location)
+    public void setImageLocation(File image_location)
     {
-        this.image_location = image_location;
+        this.image_movie = image_location;
     }
-    public String getImage_location()
+    public File getImage_location()
     {
-        return image_location;
+        return image_movie;
     }
     public List<Screening> getScreenings() {return screenings;}
     public void setScreenings(List<Screening> screenings) {this.screenings = screenings;}
