@@ -13,7 +13,6 @@ public class SimpleClient extends AbstractClient {
 	public static Message Current_Message;
 	public static SimpleClient client = null;
 
-
 	public SimpleClient(String host, int port) {
 		super(host, port);
 	}
@@ -69,6 +68,10 @@ public class SimpleClient extends AbstractClient {
 		else if(message.getMessage().equals("#UpdateScreeningForMovie_each"))
 		{
 			EventBus.getDefault().post(new UpdateEachUserScreeningEvent(message));
+		}
+		else if(message.getMessage().equals("#ServerError"))
+		{
+			EventBus.getDefault().post(new ServerErrorEvent(message));
 		}
 		else {
 			EventBus.getDefault().post(new MessageEvent(message));

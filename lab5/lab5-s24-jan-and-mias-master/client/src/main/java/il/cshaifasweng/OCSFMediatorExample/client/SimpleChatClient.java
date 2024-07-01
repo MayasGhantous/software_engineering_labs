@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -32,7 +33,7 @@ public class SimpleChatClient extends Application {
     public void start(Stage stage) throws IOException {
     	EventBus.getDefault().register(this);
         create_rooms();
-        print_rooms();
+        //print_rooms();
         scene = new Scene(loadFXML("host"), 640, 480);
         appStage = stage;
         stage.setScene(scene);
@@ -62,7 +63,7 @@ public class SimpleChatClient extends Application {
         return fxmlLoader.load();
     }
     
-    
+
 
     @Override
 	public void stop() throws Exception {

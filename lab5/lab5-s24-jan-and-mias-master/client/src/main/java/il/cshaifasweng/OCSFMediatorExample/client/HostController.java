@@ -19,8 +19,7 @@ public class HostController {
     private TextField hostTextField;
     @FXML
     private TextField portTextField;
-    @FXML
-    private TextField passwordTextField;
+
 
     @FXML
     public void submit_func(javafx.event.ActionEvent actionEvent) {
@@ -29,7 +28,7 @@ public class HostController {
         client =  new SimpleClient(host,portg);
         try{
             client.openConnection();
-            Message message = new Message(0,passwordTextField.getText());
+            Message message = new Message(0,"");
             client.sendToServer(message);
         } catch (IOException e){
             throw new RuntimeException(e);

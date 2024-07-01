@@ -14,11 +14,6 @@
                 <Font name="Agency FB" size="14.0" />
             </font>
         </TextField>
-        <TextField fx:id="passwordTextField" layoutX="221.0" layoutY="240.0" prefHeight="27.0" prefWidth="179.0">
-            <font>
-                <Font name="Agency FB" size="14.0" />
-            </font>
-        </TextField>
         <TextField fx:id="portTextField" layoutX="221.0" layoutY="154.0" prefHeight="27.0" prefWidth="179.0">
             <font>
                 <Font name="Agency FB" size="14.0" />
@@ -31,11 +26,6 @@
         </Text>
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
         <Text layoutX="145.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ip:" textAlignment="RIGHT" wrappingWidth="60.28515625">
-            <font>
-                <Font name="Agency FB" size="18.0" />
-            </font>
-        </Text>
-        <Text layoutX="152.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="password:" textAlignment="RIGHT" wrappingWidth="60.28515625">
             <font>
                 <Font name="Agency FB" size="18.0" />
             </font>

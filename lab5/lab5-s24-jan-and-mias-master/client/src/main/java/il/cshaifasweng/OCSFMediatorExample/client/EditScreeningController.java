@@ -327,6 +327,15 @@ public class EditScreeningController {
 
     }
 
+    @Subscribe
+    public void printServerError(ServerErrorEvent event)
+    {
+        Platform.runLater(()->{
+            ErrorMessage.setVisible(true);
+            ErrorMessage.setText(event.getMessage().getData());
+        });
+    }
+
     private static Screening current_screening;
     @Subscribe
     public void update_boxes(UpdateScreeningBoxesEvent event)

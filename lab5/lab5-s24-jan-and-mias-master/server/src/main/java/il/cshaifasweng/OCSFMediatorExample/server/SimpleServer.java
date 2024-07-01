@@ -1,6 +1,9 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.mysql.cj.xdevapi.Client;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
@@ -24,11 +27,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;import java.util.List;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
-	private static SessionFactory sessionFactory = getSessionFactory("213461692");
+	private static SessionFactory sessionFactory = getSessionFactory(SimpleChatServer.password);
 
 
 
@@ -184,6 +188,76 @@ public class SimpleServer extends AbstractServer {
 		session.close();
 
 	}
+	private static Date Add_2dates(Date date,Date time)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+
+		// Get hours, minutes, and seconds from the time
+		Calendar timeCalendar = Calendar.getInstance();
+		timeCalendar.setTime(time);
+
+		int hoursToAdd = timeCalendar.get(Calendar.HOUR_OF_DAY);
+		int minutesToAdd = timeCalendar.get(Calendar.MINUTE);
+		int secondsToAdd = timeCalendar.get(Calendar.SECOND);
+
+		// Add time to the date
+		calendar.add(Calendar.HOUR_OF_DAY, hoursToAdd);
+		calendar.add(Calendar.MINUTE, minutesToAdd);
+		calendar.add(Calendar.SECOND, secondsToAdd);
+
+		// Get the updated date
+		Date updatedDate = calendar.getTime();
+		return updatedDate;
+	}
+	private boolean check_the_new_screening(Screening screening,boolean is_update) throws Exception
+	{
+		Screening intersection1 = null;
+		Date begin_time = screening.getDate_time();
+		Date end_time =  Add_2dates(begin_time,screening.getMovie().getTime_());
+		List<Movie> movies = getAllMovies();
+		for (Movie movie : movies)
+		{
+			List<Screening> screenings = get_screening_for_movie(movie);
+			for(Screening current_screening : screenings)
+			{
+				if (!current_screening.getBranch().equals( screening.getBranch())||current_screening.getRoom_number()!=screening.getRoom_number())
+					continue;
+				Date current_begin = current_screening.getDate_time();
+				Date current_end =  Add_2dates(current_begin,current_screening.getMovie().getTime_());
+				if(!(begin_time.after(current_end) || end_time.before(current_begin)))
+				{
+					if(intersection1==null)
+					{
+						intersection1 = current_screening;
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+		if(intersection1 == null)
+		{
+			return true;
+		}
+		if(is_update)
+		{
+			if(intersection1.getAuto_number_screening() == screening.getAuto_number_screening())
+			{
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+
+	}
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Message message = (Message) msg;
@@ -244,17 +318,24 @@ public class SimpleServer extends AbstractServer {
 			else if(message.getMessage().equals("#AddNewScreening"))
 			{
 				Screening screening = (Screening)message.getObject();
+				boolean add =  check_the_new_screening(screening,false);
+				if(add) {
+					add_new_screening(screening);
+					message.setMessage("#UpdateScreeningForMovie");
+					message.setObject2(screening.getMovie());
+					message.setObject(get_screening_for_movie(screening.getMovie()));
 
-				add_new_screening(screening);
-				message.setMessage("#UpdateScreeningForMovie");
-				message.setObject2(screening.getMovie());
-				message.setObject(get_screening_for_movie(screening.getMovie()));
+					sendToAllClients(message);
+					Message message1 = new Message(20, "#UpdateBoxesInScreening");
+					message1.setObject(screening);
 
-				sendToAllClients(message);
-				Message message1 = new Message(20,"#UpdateBoxesInScreening");
-				message1.setObject(screening);
-
-				client.sendToClient(message1);
+					client.sendToClient(message1);
+				}
+				else{
+					message.setMessage("#ServerError");
+					message.setData("there is already a screening at this time");
+					client.sendToClient(message);
+				}
 			}
 			else if (message.getMessage().equals("#get_screening_from_id"))
 			{
@@ -286,12 +367,20 @@ public class SimpleServer extends AbstractServer {
 			{
 				Movie movie = ((Screening) message.getObject()).getMovie();
 				Screening screening =  (Screening)message.getObject();
-				update_screening(screening);
-
-				message.setObject(get_screening_for_movie(movie));
-				message.setObject2(movie);
-				message.setMessage("#UpdateScreeningForMovie");
-				sendToAllClients(message);
+				screening.setMovie(movie);
+				boolean add =  check_the_new_screening(screening,true);
+				if(add) {
+					update_screening(screening);
+					message.setObject(get_screening_for_movie(movie));
+					message.setObject2(movie);
+					message.setMessage("#UpdateScreeningForMovie");
+					sendToAllClients(message);
+				}
+				else{
+					message.setMessage("#ServerError");
+					message.setData("there is already a screening at this time");
+					client.sendToClient(message);
+				}
 
 			}
 			else if (message.getMessage().equals("#ChangeAllPrices"))

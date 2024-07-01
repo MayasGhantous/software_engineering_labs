@@ -568,7 +568,7 @@ public class MovieEditingDetailsController {
     @FXML
     public void initialize() {
         EventBus.getDefault().register(this);
-        System.out.println(EventBus.getDefault().isRegistered(this));
+
         catgory.getItems().add("Comedy");
         catgory.getItems().add("Sci-Fi");
         catgory.getItems().add("Action");
